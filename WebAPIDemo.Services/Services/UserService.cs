@@ -83,7 +83,23 @@ namespace WebAPIDemo.Services.Services
                 return null;
             }
         }
-        
-     
+        public async Task<User> updateUser(User user)
+        {
+
+            try
+            {
+                await unitOfWork.Users.UpdateAsync(user);
+                await unitOfWork.CommitAsync();
+                return user;
+                
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
+        }
+
+
     }
 }

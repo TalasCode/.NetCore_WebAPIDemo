@@ -66,12 +66,11 @@ namespace WebAPIDemo.Services.Services
                 return null;
             }
         }
-        public async Task<Event?> updateEvent(int eventId, Event _event)
+        public async Task<Event?> updateEvent(Event _event)
         {
             try
             {
-                var ExistingEvent = unitOfWork.Events.GetByIdAsync(eventId);
-                if (ExistingEvent.IsCanceled) return null;
+                
                 await unitOfWork.Events.UpdateAsync(_event);
                 await unitOfWork.CommitAsync();
                 return _event;
@@ -79,7 +78,7 @@ namespace WebAPIDemo.Services.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return null;
+                throw;
             }
         }
         public async Task<bool> DeleteEvent(int eventId)
@@ -88,6 +87,19 @@ namespace WebAPIDemo.Services.Services
             if (ExistingEvent.IsCanceled) return false;
             await unitOfWork.Events.DeleteEvent(eventId);
             return true;
+        }
+        public async Task<Event?> GetEventById(int eventId)
+        {
+            try
+            {
+                var _event = await unitOfWork.Events.GetByIdAsync(eventId);
+                return _event;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
 
 

@@ -33,10 +33,14 @@ namespace WebAPIDemo.Controllers
 
         [HttpPost("/UpdateEvent")]
 
-        public async Task<ActionResult<Event?>> UpdateEvent(int eventId , EventRequest eventRequest)
+        public async Task<ActionResult<Event?>> UpdateEvent(EventRequest eventRequest , int eventId)
         {
+            if(eventService.GetEventById(eventId) == null)
+            {
+                return BadRequest($"{eventId} Not exist");
+            }
             var newEvent = mapper.Map<Event>(eventRequest);
-           await eventService.updateEvent(eventId, newEvent);
+           await eventService.updateEvent(newEvent);
             return Ok(eventRequest);
         }
 

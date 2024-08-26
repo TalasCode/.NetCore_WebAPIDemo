@@ -45,8 +45,15 @@ namespace WebAPIDemo.Controllers
 
             return Ok(newUser);
         }
+        [HttpPost("/updateUser")]
+        public async Task<User> UpdateUser(UserRequest userRequest)
+        {
+            var user = mapper.Map<User>(userRequest);
+             await userService.updateUser(user);
+            return user;
+        }
 
-        [HttpPost("AddRoleToUser/{id}")]
+        [HttpPost("AddRoleToUser")]
 
         public async Task<IActionResult> AddRoleToUser(int userId , string role)
 

@@ -7,7 +7,7 @@ namespace WebAPIDemo.Controllers
 {
     [Route("[controller]")]
     [ApiController]
-    public class UserRoleController(IRoleService roleService , IMapper mapper) : Controller
+    public class UserRoleController(IRoleService roleService) : Controller
     {
         [HttpGet("GetUserRoles/{userid}")]
 

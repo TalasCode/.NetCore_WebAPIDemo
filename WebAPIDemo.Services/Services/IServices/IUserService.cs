@@ -15,6 +15,7 @@ namespace WebAPIDemo.Services.Services.IServices
         Task<bool> AddRoleToUser(int roleId, string role);
          Task<User?> getUserById(int userId);
         Task<List<UserWithRoles>?> GetAllUsers();
+        Task<User> updateUser(User user);
 
     }
 }
