@@ -13,5 +13,6 @@ namespace WebAPIDemo.Services.Services.IServices
         Task<List<GuideDTO>?> GetEventGuides(int eventId);
 
         Task<bool> AddEventGuide(EventGuide eventGuide);
+        Task<bool> RemoveEventGuide(EventGuide eventGuide);
     }
 }

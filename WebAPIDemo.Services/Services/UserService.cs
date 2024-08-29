@@ -8,6 +8,7 @@ using WebAPIDemo.Core.Repositories;
 using WebAPIDemo.Core.Repositories.IRepositories;
 using WebAPIDemo.Core.Models;
 using WebAPIDemo.Services.Services.IServices;
+using WebAPIDemo.Services;
 namespace WebAPIDemo.Services.Services
 {
     public class UserService(IUnitOfWork unitOfWork) : IUserService
@@ -27,7 +28,7 @@ namespace WebAPIDemo.Services.Services
             }
 
             }
-        public async Task<UserDTO?> GetUserByUsername(string username)
+        public async Task<User?> GetUserByUsername(string username)
         {
             try
             {
@@ -83,15 +84,27 @@ namespace WebAPIDemo.Services.Services
                 return null;
             }
         }
-        public async Task<User> updateUser(User user)
-        {
 
+        public async Task<User> UpdateUser(User user)
+        {
             try
             {
-                await unitOfWork.Users.UpdateAsync(user);
-                await unitOfWork.CommitAsync();
-                return user;
-                
+
+                User? existingUser = await unitOfWork.Users.GetUserByUsername(user.Username);
+                if (existingUser != null)
+                {
+                   
+                    existingUser.Fullname = user.Fullname;
+                    existingUser.DateOfBirth = user.DateOfBirth;
+                    existingUser.PasswordHash = user.PasswordHash;
+                    existingUser.Gender = user.Gender;
+                    
+
+                    await unitOfWork.Users.UpdateAsync(user);
+                    await unitOfWork.CommitAsync();
+                    return existingUser;
+                }
+                throw new UserNotFoundException("User not found");
             }
             catch (Exception ex)
             {
@@ -99,6 +112,7 @@ namespace WebAPIDemo.Services.Services
                 throw;
             }
         }
+
 
 
     }

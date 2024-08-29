@@ -12,7 +12,7 @@ namespace WebAPIDemo.Core.Repositories
 {
     public class EventGuidesRepos(DbContext context): Repository<EventGuide>(context) , IEventGuidesRepos
     {
-        private DatabaseServerContext databaseContext => (DatabaseServerContext)context;
+        private DatabaseServerContext databaseContext => (DatabaseServerContext)Context;
         public async Task<List<GuideDTO>?> GetEventGuides(int eventId)
         {
             var eventGuideIds = await databaseContext.EventGuides

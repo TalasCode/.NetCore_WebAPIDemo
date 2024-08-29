@@ -10,7 +10,7 @@ namespace WebAPIDemo.Core.Repositories.IRepositories;
 
 public interface IUserRepos : IRepository<User>
 {
-    Task<UserDTO?> GetUserByUsername(string username);
+    Task<User?> GetUserByUsername(string username);
 
     Task<bool> AddRoleToUser(int userId , string role);
 

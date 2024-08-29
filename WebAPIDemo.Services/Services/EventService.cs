@@ -48,7 +48,7 @@ namespace WebAPIDemo.Services.Services
             catch (Exception ex)
             {
                 Console.WriteLine(ex.Message);
-                return new List<EventDTO>();
+                return null;
             }
         }
 

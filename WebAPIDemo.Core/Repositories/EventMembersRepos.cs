@@ -12,7 +12,7 @@ namespace WebAPIDemo.Core.Repositories
 {
     public class EventMembersRepos(DbContext context) :Repository<EventMember>(context) ,IEventMembersRepos
     {
-        private DatabaseServerContext databaseContext => (DatabaseServerContext)context;
+        private DatabaseServerContext databaseContext => (DatabaseServerContext)Context;
 
         public async Task<List<MemberDTO>?> GetEventMembers(int eventId)
         {

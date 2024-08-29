@@ -17,7 +17,7 @@ namespace WebAPIDemo.Services.Services
             try
             {
                 var roles = await unitOfWork.Roles.GetUserRolesByUserid(userId);
-                return roles ?? new List<UserRole>();
+                return roles ?? null;
             }
             catch (Exception ex)
             {

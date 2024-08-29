@@ -14,7 +14,7 @@ namespace WebAPIDemo.Core.Repositories
 {
     public class EventRepos(DbContext context): Repository<Event> (context), IEventRepos
     {
-        private DatabaseServerContext databaseContext => (DatabaseServerContext)context;
+        private DatabaseServerContext databaseContext => (DatabaseServerContext)Context;
 
         public async Task<List<EventDTO>?> GetAllEvents()
         {
@@ -33,7 +33,7 @@ namespace WebAPIDemo.Core.Repositories
                     
         }
 
-        public async Task<List<EventDTO>> GetEventByCategory(int CategoryId)
+        public async Task<List<EventDTO>?> GetEventByCategory(int CategoryId)
         {
             return await databaseContext.Events
                 .Where(e => e.CategoryId == CategoryId)

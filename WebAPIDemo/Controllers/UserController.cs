@@ -8,6 +8,7 @@ using WebAPIDemo.Request;
 using WebAPIDemo.Services.Services.IServices;
 using WebAPIDemo.Services.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
+using WebAPIDemo.Services;
 
 
 namespace WebAPIDemo.Controllers
@@ -46,12 +47,35 @@ namespace WebAPIDemo.Controllers
             return Ok(newUser);
         }
         [HttpPost("/updateUser")]
-        public async Task<User> UpdateUser(UserRequest userRequest)
+        public async Task<ActionResult<User>> UpdateUser(UserRequest userRequest)
         {
-            var user = mapper.Map<User>(userRequest);
-             await userService.updateUser(user);
-            return user;
+            try
+            {
+                if (userRequest.Username != null)
+                {
+                    var user = mapper.Map<User>(userRequest);
+                    var updatedUser = await userService.UpdateUser(user);
+                    if (updatedUser != null)
+                    {
+                        return Ok(updatedUser);
+                    }
+                    else
+                    {
+                        return NotFound("User not found");
+                    }
+                }
+                else
+                {
+                    return BadRequest("Username is required");
+                }
+            }
+            catch (UserNotFoundException ex)
+            {
+                return NotFound(ex.Message);
+            }
         }
+
+
 
         [HttpPost("AddRoleToUser")]
 

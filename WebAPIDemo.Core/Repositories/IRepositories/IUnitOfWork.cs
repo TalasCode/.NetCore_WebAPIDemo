@@ -14,6 +14,11 @@ namespace WebAPIDemo.Core.Repositories.IRepositories
         public IEventRepos Events { get; }
         public IEventGuidesRepos EventGuides { get; }
         public IEventMembersRepos EventMembers { get; }
+
+        public IMemberRepos Members { get; }
+        public IGuideRepos Guides { get; }
+
+
         Task<int> CommitAsync();
     }
 }

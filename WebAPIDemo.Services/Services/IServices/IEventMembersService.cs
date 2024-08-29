@@ -12,5 +12,6 @@ namespace WebAPIDemo.Services.Services.IServices
     {
         Task<List<MemberDTO>?> GetEventMembers(int eventId);
         Task<bool> AddEventMember(EventMember eventGuide);
+        Task<bool> RemoveEventMember(EventMember eventMember);
     }
 }

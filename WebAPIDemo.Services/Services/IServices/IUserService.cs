@@ -10,12 +10,12 @@ namespace WebAPIDemo.Services.Services.IServices
 {
     public interface IUserService
     {
-        Task<UserDTO?> GetUserByUsername(string username);
+        Task<User?> GetUserByUsername(string username);
         Task<User?> CreateUser(User user);
         Task<bool> AddRoleToUser(int roleId, string role);
          Task<User?> getUserById(int userId);
         Task<List<UserWithRoles>?> GetAllUsers();
-        Task<User> updateUser(User user);
+        Task<User> UpdateUser(User user);
 
     }
 }

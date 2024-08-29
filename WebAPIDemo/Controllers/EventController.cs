@@ -21,21 +21,29 @@ namespace WebAPIDemo.Controllers
         [HttpPost("CreateEvent")]
         public async Task<ActionResult<Event?>> CreateEvent(EventRequest eventRequest)
         {
-            var user = await userService.getUserById(eventRequest.UserId.Value);
-            if (user == null)
+            if (eventRequest.UserId != null)
             {
-                return BadRequest($"User with ID {eventRequest.UserId} does not exist.");
+                var user = await userService.getUserById(eventRequest.UserId.Value);
+
+                if (user == null)
+                {
+                    return BadRequest($"User with ID {eventRequest.UserId} does not exist.");
+                }
+                var newEvent = mapper.Map<Event>(eventRequest);
+                await eventService.createEvent(newEvent);
+                return Ok(newEvent);
             }
-            var newEvent = mapper.Map<Event>(eventRequest);
-            await eventService.createEvent(newEvent);
-            return Ok(newEvent);
+            else
+            {
+                return BadRequest("UserId null");
+            }
         }
 
-        [HttpPost("/UpdateEvent")]
+        [HttpPost("UpdateEvent")]
 
         public async Task<ActionResult<Event?>> UpdateEvent(EventRequest eventRequest , int eventId)
         {
-            if(eventService.GetEventById(eventId) == null)
+            if(await eventService.GetEventById(eventId) == null)
             {
                 return BadRequest($"{eventId} Not exist");
             }
@@ -45,10 +53,10 @@ namespace WebAPIDemo.Controllers
         }
 
         [HttpGet("GetEventByUser")]
-        public async Task<EventDTO> GetEventsByUser(int userId)
+        public async Task<EventRequest> GetEventsByUser(int userId)
         {
             var events = await eventService.GetEventByUser(userId);
-            var eventDTO = mapper.Map<EventDTO>(events);
+            var eventDTO = mapper.Map<EventRequest>(events);
             return eventDTO;
         }
     }

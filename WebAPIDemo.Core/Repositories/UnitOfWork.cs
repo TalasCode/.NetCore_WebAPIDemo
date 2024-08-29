@@ -16,6 +16,8 @@ namespace WebAPIDemo.Core.Repositories
         private IEventRepos? _eventRepository;
         private IEventGuidesRepos? _eventGuideRepository;
         private IEventMembersRepos? _eventMemberRepository;
+        private IMemberRepos? _memberRepository;
+        private IGuideRepos? _guideRepository;
         public IUserRepos Users =>
             _userRepository ??= new UserRepos(context);
 
@@ -31,6 +33,10 @@ namespace WebAPIDemo.Core.Repositories
 
         public IEventMembersRepos EventMembers =>
         _eventMemberRepository ??= new EventMembersRepos(context);
+        public IMemberRepos Members =>
+      _memberRepository ??= new MemberRepos(context);
+        public IGuideRepos Guides =>
+     _guideRepository ??= new GuideRepos(context);
 
 
 

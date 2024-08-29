@@ -15,7 +15,7 @@ namespace WebAPIDemo.Core.Repositories
 {
     internal class UserRepos(DbContext context) : Repository<User>(context), IUserRepos
     {
-        private DatabaseServerContext databaseServerContext => (DatabaseServerContext)context;
+        private DatabaseServerContext databaseServerContext => (DatabaseServerContext)Context;
         public async Task<List<UserWithRoles>?> GetAllUsers()
         {
             return await databaseServerContext.Users
@@ -36,20 +36,10 @@ namespace WebAPIDemo.Core.Repositories
 
                 }).ToListAsync();
         }
-        public async Task<UserDTO?> GetUserByUsername(string username)
+        public async Task<User?> GetUserByUsername(string username)
         {
             return await databaseServerContext.Users
-                .Where(u => u.Username == username)
-                .Select(u => new UserDTO
-                {
-                    Id = u.Id,
-                    Username = u.Username,
-                    FullName = u.Fullname,
-                    DateOfBirth = u.DateOfBirth,
-                    Gender = u.Gender,
-                    PasswordHash = u.PasswordHash
-                })
-                .FirstOrDefaultAsync();
+                .Where(u => u.Username == username).FirstOrDefaultAsync();
         }
 
         public async Task<bool> AddRoleToUser(int userId, string role)

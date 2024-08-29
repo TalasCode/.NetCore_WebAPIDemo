@@ -8,6 +8,9 @@ namespace WebAPIDemo.Mapping
         public MappingProfile() {
             CreateMap<UserRequest, User>();
             CreateMap<EventRequest, Event>();
+            CreateMap<EventGuideRequest, EventGuide>();
+            CreateMap<EventMemberRequest, EventMember>();
+            CreateMap<MemberRequest, Member>();
             
         }
     }
