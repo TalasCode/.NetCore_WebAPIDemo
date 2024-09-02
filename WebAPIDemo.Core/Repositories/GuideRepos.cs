@@ -42,5 +42,11 @@ namespace WebAPIDemo.Core.Repositories
                     PasswordHash = g.PasswordHash,
                 }).FirstOrDefaultAsync();
         }
+        public async Task<bool> DeleteGuide(int guideId)
+        {
+             await DatabaseContext.Guides.Where(g=> g.Id == guideId).ExecuteDeleteAsync();
+            await DatabaseContext.SaveChangesAsync();
+            return true;
+        }
     }
 }

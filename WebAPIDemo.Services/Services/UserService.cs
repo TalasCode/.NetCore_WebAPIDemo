@@ -9,6 +9,11 @@ using WebAPIDemo.Core.Repositories.IRepositories;
 using WebAPIDemo.Core.Models;
 using WebAPIDemo.Services.Services.IServices;
 using WebAPIDemo.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using Microsoft.Extensions.Configuration;
 namespace WebAPIDemo.Services.Services
 {
     public class UserService(IUnitOfWork unitOfWork) : IUserService
@@ -89,31 +94,37 @@ namespace WebAPIDemo.Services.Services
         {
             try
             {
-
                 User? existingUser = await unitOfWork.Users.GetUserByUsername(user.Username);
-                if (existingUser != null)
+                if (existingUser == null)
                 {
-                   
-                    existingUser.Fullname = user.Fullname;
-                    existingUser.DateOfBirth = user.DateOfBirth;
-                    existingUser.PasswordHash = user.PasswordHash;
-                    existingUser.Gender = user.Gender;
-                    
-
-                    await unitOfWork.Users.UpdateAsync(user);
-                    await unitOfWork.CommitAsync();
-                    return existingUser;
+                    throw new NotFoundException("User not found");
                 }
-                throw new UserNotFoundException("User not found");
+
+                // Update properties
+                existingUser.Fullname = user.Fullname;
+                existingUser.DateOfBirth = user.DateOfBirth;
+                existingUser.PasswordHash = user.PasswordHash;
+                existingUser.Gender = user.Gender;
+
+                // Attempt to save changes
+                await unitOfWork.Users.UpdateAsync(existingUser);
+                await unitOfWork.CommitAsync();
+
+                return existingUser;
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                // Handle concurrency conflict
+                Console.WriteLine("Concurrency conflict: " + ex.Message);
+                // Optionally, you can implement retry logic or inform the user
+                throw;
             }
             catch (Exception ex)
             {
+                // Log and rethrow other exceptions
                 Console.WriteLine(ex.Message);
                 throw;
             }
         }
-
-
-
     }
 }

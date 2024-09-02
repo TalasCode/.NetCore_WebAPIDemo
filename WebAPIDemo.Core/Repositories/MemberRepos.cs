@@ -45,5 +45,10 @@ namespace WebAPIDemo.Core.Repositories
                 }).FirstOrDefaultAsync();
         
         }
+        public async Task<bool> DeleteMember(int memberId)
+        {
+            await DatabaseContext.Members.Where(m => m.Id == memberId).ExecuteDeleteAsync();
+            return true;
+        }
     }
 }

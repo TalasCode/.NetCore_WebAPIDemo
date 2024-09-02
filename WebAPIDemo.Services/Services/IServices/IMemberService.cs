@@ -14,7 +14,8 @@ namespace WebAPIDemo.Services.Services.IServices
         Task<List<MemberDTO>> GetAllMembers();
         Task<Member?> GetMemberById(int id);
         Task<MemberDTO> GetMemberByEmail(string email);
-        Task<bool> Remove(Member member);
+        Task<bool> DeleteMember(int memberId);
         Task<Member> Add(Member member);
+        Task<Member> Update(Member member);
     }
 }

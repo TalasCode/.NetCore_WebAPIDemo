@@ -17,7 +17,7 @@ namespace WebAPIDemo.Services.Services.IServices
         Task<List<EventDTO>?> GetEventByUser(int UserId);
 
         Task<Event?> createEvent(Event _event);
-        Task<Event?> updateEvent(Event _event);
+        Task<Event?> UpdateEvent(Event _event);
         Task<bool> DeleteEvent(int eventId);
         Task<Event?> GetEventById(int eventId);
 

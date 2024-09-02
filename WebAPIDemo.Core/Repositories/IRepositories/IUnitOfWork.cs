@@ -17,7 +17,7 @@ namespace WebAPIDemo.Core.Repositories.IRepositories
 
         public IMemberRepos Members { get; }
         public IGuideRepos Guides { get; }
-
+        public IAuthRepos Auth { get; }
 
         Task<int> CommitAsync();
     }

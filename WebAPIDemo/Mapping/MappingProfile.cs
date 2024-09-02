@@ -11,6 +11,8 @@ namespace WebAPIDemo.Mapping
             CreateMap<EventGuideRequest, EventGuide>();
             CreateMap<EventMemberRequest, EventMember>();
             CreateMap<MemberRequest, Member>();
+            CreateMap<GuideRequest, Guide>();
+            CreateMap<LoginRequest, User>();
             
         }
     }

@@ -42,7 +42,7 @@ namespace WebAPIDemo.Core.Repositories
         public async Task<bool> AddEventMember(EventMember eventMember)
         {
             var eventExist = await databaseContext.Events.Where(e => e.Id == eventMember.MemberId).FirstOrDefaultAsync();
-            var MemberExist = await databaseContext.Guides.Where(m => m.Id == eventMember.MemberId).FirstOrDefaultAsync();
+            var MemberExist = await databaseContext.Members.Where(m => m.Id == eventMember.MemberId).FirstOrDefaultAsync();
             if (eventExist == null || MemberExist == null) return false;
 
             await databaseContext.EventMembers.AddAsync(eventMember);

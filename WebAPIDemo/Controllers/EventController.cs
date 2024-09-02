@@ -5,10 +5,12 @@ using WebAPIDemo.Services.Services.IServices;
 using WebAPIDemo.Request;
 using WebAPIDemo.Core.DTO;
 using WebAPIDemo.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 namespace WebAPIDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EventController(IEventService eventService , IMapper mapper , IUserService userService): Controller
     {
         
@@ -48,7 +50,8 @@ namespace WebAPIDemo.Controllers
                 return BadRequest($"{eventId} Not exist");
             }
             var newEvent = mapper.Map<Event>(eventRequest);
-           await eventService.updateEvent(newEvent);
+            newEvent.Id = eventId;
+           await eventService.UpdateEvent(newEvent);
             return Ok(eventRequest);
         }
 

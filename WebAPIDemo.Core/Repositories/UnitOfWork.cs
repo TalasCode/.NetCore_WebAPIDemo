@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace WebAPIDemo.Core.Repositories
 {
-    public class UnitOfWork( DatabaseServerContext context) : IUnitOfWork
+    public class UnitOfWork( DatabaseServerContext context , IConfiguration configuration) : IUnitOfWork
     {
         private UserRepos? _userRepository;
         private IRoleRepos? _roleRepository;
@@ -18,6 +18,7 @@ namespace WebAPIDemo.Core.Repositories
         private IEventMembersRepos? _eventMemberRepository;
         private IMemberRepos? _memberRepository;
         private IGuideRepos? _guideRepository;
+        private IAuthRepos? _authRepository;
         public IUserRepos Users =>
             _userRepository ??= new UserRepos(context);
 
@@ -38,7 +39,8 @@ namespace WebAPIDemo.Core.Repositories
         public IGuideRepos Guides =>
      _guideRepository ??= new GuideRepos(context);
 
-
+        public IAuthRepos Auth =>
+            _authRepository ??= new AuthRepos(context,configuration);
 
         public async Task<int> CommitAsync()
         {

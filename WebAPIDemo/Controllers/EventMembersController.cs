@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPIDemo.Core.DTO;
 using WebAPIDemo.Core.Models;
@@ -10,6 +11,7 @@ namespace WebAPIDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class EventMembersController(IMapper mapper , IEventMembersService eventMembersService , IEventService eventService):Controller
     {
         [HttpGet("GetAllEventMembers")]

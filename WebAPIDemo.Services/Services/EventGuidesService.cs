@@ -14,8 +14,7 @@ namespace WebAPIDemo.Services.Services
     {
         public async Task<List<GuideDTO>?> GetEventGuides(int eventId)
         {
-            var _event = unitOfWork.Events.GetByIdAsync(eventId);
-            if(!_event.IsCompleted) return null;
+            
             return await unitOfWork.EventGuides.GetEventGuides(eventId);
         }
 
@@ -27,6 +26,7 @@ namespace WebAPIDemo.Services.Services
             var _event = await unitOfWork.Events.GetByIdAsync(eventGuide.EventId.Value);
             if (_event == null) return false;
              await unitOfWork.EventGuides.AddEventGuide(eventGuide);
+            
             return true;
         }
 

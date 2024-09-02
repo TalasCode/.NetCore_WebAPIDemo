@@ -5,10 +5,13 @@ using WebAPIDemo.Request;
 using WebAPIDemo.Services.Services.IServices;
 using WebAPIDemo.Core.DTO;
 using WebAPIDemo.Core.Models;
+using WebAPIDemo.Services.Services;
+using Microsoft.AspNetCore.Authorization;
 namespace WebAPIDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class MemberController(IMemberService memberService, IMapper mapper) : Controller
     {
         [HttpGet("GetAllMembers")]
@@ -30,7 +33,7 @@ namespace WebAPIDemo.Controllers
             }
             else
             {
-                await memberService.Remove(member);
+                await memberService.DeleteMember(id);
                 return true;
             }
         }
@@ -42,6 +45,19 @@ namespace WebAPIDemo.Controllers
             var member = mapper.Map<Member>(memberRequest);
             await memberService.Add(member);
             return Ok(member);
+        }
+        [HttpPost("UpdateMember")]
+
+        public async Task<ActionResult<Member?>> UpdateMember(MemberRequest memberRequest, int memberId)
+        {
+            if (await memberService.GetMemberById(memberId) == null)
+            {
+                return BadRequest($"{memberId} Not exist");
+            }
+            var newMember = mapper.Map<Member>(memberRequest);
+            newMember.Id = memberId;
+            await memberService.Update(newMember);
+            return Ok(newMember);
         }
     }
 }

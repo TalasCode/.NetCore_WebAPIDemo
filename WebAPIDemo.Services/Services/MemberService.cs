@@ -34,7 +34,7 @@ namespace WebAPIDemo.Services.Services
             {
 
                 Console.WriteLine(e.Message);
-                return null;
+                throw;
             }
         }
         public async Task<MemberDTO?> GetMemberByEmail(string email)
@@ -50,14 +50,14 @@ namespace WebAPIDemo.Services.Services
                 return null;
             }
         }
-        public async Task<bool> Remove(Member member)
+        public async Task<bool> DeleteMember(int memberId)
             {
             try
             {
-                if (await unitOfWork.Members.GetByIdAsync(member.Id) == null) return false;
+                if (await unitOfWork.Members.GetByIdAsync(memberId) == null) return false;
                 else
                 {
-                    unitOfWork.Members.Remove(member);
+                    await unitOfWork.Members.DeleteMember(memberId);
                     await unitOfWork.CommitAsync();
                     return true;
                 }
@@ -75,6 +75,30 @@ namespace WebAPIDemo.Services.Services
              await unitOfWork.Members.AddAsync(member);
            await unitOfWork.CommitAsync();
             return member;
+        }
+        public async Task<Member> Update(Member member)
+        {
+            try
+            {
+                Member? existingMember = await unitOfWork.Members.GetByIdAsync(member.Id);
+                if (existingMember == null) throw new NotFoundException("Member Not Found");
+                existingMember.Name = member.Name;
+                existingMember.Email = member.Email;
+                existingMember.Gender = member.Gender;
+                existingMember.JoiningDate = member.JoiningDate;
+                existingMember.EmergencyNumber = member.EmergencyNumber;
+                existingMember.Photo = member.Photo;
+                existingMember.DateOfBirth = member.DateOfBirth;
+                existingMember.Profession = member.Profession;
+              await unitOfWork.Members.UpdateAsync(existingMember);
+                await unitOfWork.CommitAsync();
+                return existingMember;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine(ex.Message);
+                throw;
+            }
         }
     }
 }

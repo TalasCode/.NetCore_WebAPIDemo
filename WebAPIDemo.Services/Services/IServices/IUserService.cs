@@ -16,6 +16,7 @@ namespace WebAPIDemo.Services.Services.IServices
          Task<User?> getUserById(int userId);
         Task<List<UserWithRoles>?> GetAllUsers();
         Task<User> UpdateUser(User user);
+        //Task<string?> AuthenticateAsync(string username, string password);
 
     }
 }

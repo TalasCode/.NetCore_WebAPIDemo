@@ -9,12 +9,14 @@ using WebAPIDemo.Services.Services.IServices;
 using WebAPIDemo.Services.Services;
 using Microsoft.AspNetCore.Http.HttpResults;
 using WebAPIDemo.Services;
+using Microsoft.AspNetCore.Authorization;
 
 
 namespace WebAPIDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+    [Authorize]
     public class UserController(IUserService userService, IMapper mapper) : Controller
 
     {
@@ -47,13 +49,13 @@ namespace WebAPIDemo.Controllers
             return Ok(newUser);
         }
         [HttpPost("/updateUser")]
-        public async Task<ActionResult<User>> UpdateUser(UserRequest userRequest)
+        public async Task<ActionResult<User>> UpdateUser(int id ,UserRequest userRequest)
         {
-            try
-            {
+            
                 if (userRequest.Username != null)
                 {
                     var user = mapper.Map<User>(userRequest);
+                user.Id = id;
                     var updatedUser = await userService.UpdateUser(user);
                     if (updatedUser != null)
                     {
@@ -69,11 +71,8 @@ namespace WebAPIDemo.Controllers
                     return BadRequest("Username is required");
                 }
             }
-            catch (UserNotFoundException ex)
-            {
-                return NotFound(ex.Message);
-            }
-        }
+            
+        
 
 
 
@@ -87,13 +86,14 @@ namespace WebAPIDemo.Controllers
             return Ok(result);
         }
 
-        [HttpGet("/{username}")]
-        public async Task<UserDTO> GetUserByUsername(string username)
+        [HttpGet("/getUserByUsername")]
+        public async Task<ActionResult<UserRequest>> GetUserByUsername(string username)
         {
 
-            var user = await userService.GetUserByUsername(username);
-            var userDTO = mapper.Map<UserDTO>(user);
-            return userDTO;
+            User? user = await userService.GetUserByUsername(username);
+            if (user == null) Console.WriteLine("Username not found");
+            var userRequest = mapper.Map<UserRequest>(user);
+            return Ok(userRequest);
             
         }
 

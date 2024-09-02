@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Logging;
+﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -66,14 +67,35 @@ namespace WebAPIDemo.Services.Services
                 return null;
             }
         }
-        public async Task<Event?> updateEvent(Event _event)
+        public async Task<Event?> UpdateEvent(Event _event)
         {
             try
             {
-                
-                await unitOfWork.Events.UpdateAsync(_event);
+                // Fetch the existing event
+                Event existingEvent = await unitOfWork.Events.GetByIdAsync(_event.Id);
+                if (existingEvent == null)
+                {
+                    throw new NotFoundException("Event Not Found");
+                }
+
+             
+                existingEvent.Name = _event.Name;
+                existingEvent.CategoryId = _event.CategoryId; 
+                existingEvent.Cost = _event.Cost; 
+                existingEvent.Destination = _event.Destination;
+                existingEvent.EventDate = _event.EventDate;
+                existingEvent.Status = _event.Status;
+                existingEvent.UserId = _event.UserId;
+                await unitOfWork.Events.UpdateAsync(existingEvent);
                 await unitOfWork.CommitAsync();
-                return _event;
+
+                return existingEvent; 
+            }
+            catch (DbUpdateConcurrencyException ex)
+            {
+                
+                Console.WriteLine("Concurrency conflict: " + ex.Message);
+                throw;
             }
             catch (Exception ex)
             {

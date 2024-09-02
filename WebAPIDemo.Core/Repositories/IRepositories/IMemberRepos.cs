@@ -12,5 +12,6 @@ namespace WebAPIDemo.Core.Repositories.IRepositories
     {
         Task<List<MemberDTO>> GetAllMembers();
         Task<MemberDTO?> GetMemberByEmail(string email);
+        Task<bool> DeleteMember(int memberId);
     }
 }

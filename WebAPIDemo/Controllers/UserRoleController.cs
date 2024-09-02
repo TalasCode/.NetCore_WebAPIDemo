@@ -1,4 +1,5 @@
 ﻿using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using WebAPIDemo.Request;
 using WebAPIDemo.Services.Services.IServices;
@@ -7,6 +8,7 @@ namespace WebAPIDemo.Controllers
 {
     [Route("[controller]")]
     [ApiController]
+    [Authorize]
     public class UserRoleController(IRoleService roleService) : Controller
     {
         [HttpGet("GetUserRoles/{userid}")]

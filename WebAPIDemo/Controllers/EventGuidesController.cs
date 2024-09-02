@@ -4,11 +4,14 @@ using WebAPIDemo.Core.DTO;
 using WebAPIDemo.Services.Services.IServices;
 using WebAPIDemo.Request;
 using WebAPIDemo.Core.Models;
+using Microsoft.AspNetCore.Authorization;
 namespace WebAPIDemo.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class EventGuidesController(IEventGuidesService eventGuidesService , IMapper mapper , IEventService eventService) :Controller
+    [Authorize]
+    
+    public class EventGuidesController(IEventGuidesService eventGuidesService , IMapper mapper , IEventService eventService , IGuideService guideService) :Controller
     {
         [HttpGet("GetAllEventGuides")]
 
@@ -24,9 +27,15 @@ namespace WebAPIDemo.Controllers
         [HttpPost("AddEventGuide")]
         public async Task<IActionResult> AddEventGuide(EventGuideRequest eventGuideRequest)
         {
-            if (eventGuideRequest.EventId.HasValue && eventService.GetEventById(eventGuideRequest.EventId.Value) == null)
+            if (eventGuideRequest.EventId.HasValue && eventGuideRequest.GuidId.HasValue) 
             {
+                var eventEntity = await eventService.GetEventById(eventGuideRequest.EventId.Value);
+                if(eventEntity == null) 
                 return BadRequest("Event not Exist");
+                var guideEntity = await guideService.GetGuideById(eventGuideRequest.GuidId.Value);
+                if (guideEntity == null)
+                    return BadRequest("Guide not Exist");
+
             }
             EventGuide eventGuide = mapper.Map<EventGuide>(eventGuideRequest);
             await eventGuidesService.AddEventGuide(eventGuide);
